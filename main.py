@@ -1,39 +1,34 @@
-from multiprocessing import Pool
-from process import get_folders
-from process import get_drives
-from repository.duplicate_collection import DuplicateCollection
-from repository.files_collection import FilesCollection
-from service import add_files, handle_candidate_duplicate_file
-import functools
-import operator
-
-result_list = []
+from database.DTO.FilesDto import Metadata, File
+from database.DuplicateInfoDAO import create_duplicate_info_table, drop_duplicate_info_table
+from database.InfoFileDAO import create_file_info_table, drop_file_info_table, get_grouped_files, get_files_by_metadata
+from Service.DuplicateService import handle_candidate_duplicate_file
+from Service.FilesService import search_folders
 
 
-def get_all_folders():
-    pool = Pool()
-    multiple_results = [pool.apply_async(func=get_folders, args=(drive,)) for drive
-                        in get_drives()]
-    pool.close()
-    pool.join()
-
-    return functools.reduce(operator.iconcat, map(lambda result: result.get(), multiple_results), [])
+def create_tables():
+    create_file_info_table()
+    create_duplicate_info_table()
 
 
-def drop_collections():
-    FilesCollection.drop()
-    DuplicateCollection.drop()
+def drop_tables():
+    drop_file_info_table()
+    drop_duplicate_info_table()
 
 
 if __name__ == '__main__':
-    drop_collections()
+    drop_tables()  # instead a file, could be in memory, that way after the process all storage info will disappear
 
-    folders = get_all_folders()
+    create_tables()
 
-    add_files(folders)
+    search_folders()
 
-    handle_candidate_duplicate_file()
+    # files = [[File(*file_info) for file_info in get_files_by_metadata(Metadata(*metadata))]
+    #          for metadata in get_grouped_files()]
 
+    metadata_list = [Metadata(*metadata) for metadata in get_grouped_files()]
 
+    results = [get_files_by_metadata(metadata) for metadata in metadata_list]
 
+    files = [File(*file) for file in results]
 
+    handle_candidate_duplicate_file(files)
