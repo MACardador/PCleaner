@@ -15,20 +15,13 @@ def drop_tables():
     drop_duplicate_info_table()
 
 
-if __name__ == '__main__':
-    drop_tables()  # instead a file, could be in memory, that way after the process all storage info will disappear
-
+def main_process():
+    drop_tables()
     create_tables()
-
     search_folders()
+    handle_candidate_duplicate_file([get_files_by_metadata(metadata) for metadata in
+                                     [Metadata(*metadata) for metadata in get_grouped_files()]])
 
-    # files = [[File(*file_info) for file_info in get_files_by_metadata(Metadata(*metadata))]
-    #          for metadata in get_grouped_files()]
 
-    metadata_list = [Metadata(*metadata) for metadata in get_grouped_files()]
-
-    results = [get_files_by_metadata(metadata) for metadata in metadata_list]
-
-    files = [File(*file) for file in results]
-
-    handle_candidate_duplicate_file(files)
+if __name__ == '__main__':
+    main_process()

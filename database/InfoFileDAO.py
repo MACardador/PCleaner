@@ -24,10 +24,10 @@ def insert_file_info(file):
         VALUES (:directory, :file, :metadata_width, :metadata_height, :metadata_channel, :metadata_type)""",
                        {'directory': file.directory,
                         'file': file.file,
-                        'metadata_width': file.metadata_width,
-                        'metadata_height': file.metadata_height,
-                        'metadata_channel': file.metadata_channel,
-                        'metadata_type': file.metadata_type})
+                        'metadata_width': file.metadata.width,
+                        'metadata_height': file.metadata.height,
+                        'metadata_channel': file.metadata.channel,
+                        'metadata_type': file.metadata.file_type})
 
 
 def get_grouped_files():

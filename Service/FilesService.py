@@ -29,8 +29,8 @@ def recursive_folder(self):
                     if im is not None:
                         height, width, channel = im.shape
                         insert_file_info(
-                            File(file.search(new).group(1), file.search(new).group(2), Metadata(width, height, channel,
-                                 extension.search(new).group())))
+                            File(None, file.search(new).group(1), file.search(new).group(2),
+                                 Metadata(width, height, channel, extension.search(new).group())))
 
     except PermissionError:
         print(f"Access denied to read")

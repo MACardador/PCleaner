@@ -9,20 +9,15 @@ class Metadata:
 
 
 class File:
-    def __init__(self, directory: str, file: str, metadata: Metadata):
-        self.id = None
+    def __init__(self, _id, directory: str, file: str, metadata: Metadata = None):
+        self.id = _id
         self.directory = directory
         self.file = file
-        self.metadata_width = metadata.width
-        self.metadata_height = metadata.height
-        self.metadata_channel = metadata.channel
-        self.metadata_type = metadata.file_type
+        self.metadata = metadata
 
-
-    def __init__(self, directory: str, file: str):
-        self.id = None
-        self.directory = directory
-        self.file = file
+    @staticmethod
+    def id_directory_file(_id: int, directory: str, file: str):
+        return File(_id, directory, file, None)
 
     @property
     def get_all_path(self):
