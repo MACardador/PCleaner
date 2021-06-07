@@ -2,8 +2,7 @@ import cv2
 import os
 import re
 import win32api
-from database.DTO.FilesDto import File, Metadata
-from database.InfoFileDAO import insert_file_info
+from database.models import insert_file_info, File, Metadata
 
 
 def get_drives():

@@ -1,8 +1,6 @@
 import cv2
 
-from database.DTO.FilesDto import File
-from database.DTO.DuplicateDto import Duplicate
-from database.DuplicateInfoDAO import insert_duplicate
+from database.models import File, Duplicate, insert_duplicate
 
 
 def compare_image(f_file: File, s_file: File):
@@ -22,4 +20,4 @@ def handle_candidate_duplicate_file(results):
         for file in result:
             result.remove(file)
             for other_file in result:
-                compare_image(File.id_directory_file(*file), File.id_directory_file(*other_file))
+                compare_image(file, other_file)
